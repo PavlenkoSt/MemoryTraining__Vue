@@ -1,28 +1,53 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Header/>
+    <div class="container">
+      <Board 
+        :gameIsStarted="this.gameIsStarted"
+        :gameIsStartedChange="this.gameIsStartedChange"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+  import Header from './components/Header.vue'
+  import Board from './components/Board.vue'
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  export default {
+    name: 'App',
+    components: {
+      Header,
+      Board
+    },
+    data: () => ({
+      gameIsStarted: false
+    }),
+    methods: {
+      gameIsStartedChange(bool){
+        this.gameIsStarted = bool
+      }
+    }
   }
-}
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  *, *::before, *::after{
+    box-sizing: border-box;
+  }
+  html, body{
+    margin: 0;
+    background-color: rgb(231, 231, 231);
+  }
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+  }
+  .container{
+    display: grid;
+    grid-template-columns: 450px 1fr;
+  }
 </style>
