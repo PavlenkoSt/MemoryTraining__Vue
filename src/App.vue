@@ -1,10 +1,13 @@
 <template>
   <div id="app">
-    <Header/>
+    <Header
+      ref="headerRef"
+    />
     <div class="container">
       <Board 
         :gameIsStarted="this.gameIsStarted"
         @startGame="updateGameIsStarted($event)"
+        @movesChange="movesHandler"
       />
     </div>
   </div>
@@ -26,6 +29,13 @@
     methods: {
       updateGameIsStarted(bool){
         this.gameIsStarted = bool
+      },
+      movesHandler(needToClear = false){
+        if(needToClear){
+          this.$refs.headerRef.clearMoves()
+        }else{
+          this.$refs.headerRef.incrementMoves()
+        }
       }
     }
   }

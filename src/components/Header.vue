@@ -1,7 +1,7 @@
 <template>
   <div>
       <div>
-          Moves
+          Moves: {{ moves }}
       </div>
       <div>
           Timer
@@ -12,6 +12,17 @@
 <script>
     export default {
         name: 'Header',
+        data: () => ({
+            moves: 0
+        }),
+        methods: {
+            incrementMoves(){
+                this.moves += 1
+            },
+            clearMoves(){
+                this.moves = 0
+            }
+        }
     }
 </script>
 

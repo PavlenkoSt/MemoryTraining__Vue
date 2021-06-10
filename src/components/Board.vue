@@ -55,6 +55,7 @@
             },
             restartGame(){
                 this.initializeRandomOrderNumbers()
+                this.$emit('movesChange', true)
             },
             initializeRandomOrderNumbers(){
                 const sourceNumbers = [1, 2, 3, 4, 5, 6]
@@ -103,6 +104,7 @@
                         return cell
                     })
                     this.currentActiveNumbers = []
+                    this.$emit('movesChange')
                 }, 1000)
             }
         },
