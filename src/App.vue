@@ -6,6 +6,7 @@
     <div class="container">
       <Board 
         :gameIsStarted="this.gameIsStarted"
+        :boardSize="this.boardSize"
         @startGame="updateGameIsStarted($event)"
         @movesChange="movesHandler"
         @timerChange="timerHandler"
@@ -13,7 +14,9 @@
       />
       <Options
         :gameIsStarted="this.gameIsStarted"
+        :boardSize="this.boardSize"
         @restart="restartGame"
+        @changeBoardSize="changeBoardSize"
       />
     </div>
   </div>
@@ -32,7 +35,8 @@
       Options
     },
     data: () => ({
-      gameIsStarted: false
+      gameIsStarted: false,
+      boardSize: '4x3'
     }),
     methods: {
       updateGameIsStarted(bool){
@@ -55,6 +59,10 @@
             this.$refs.headerRef.restartTimer()
             break
           }
+          case 'clear': {
+            this.$refs.headerRef.clearTimer()
+            break
+          }
           case 'start': {
             this.$refs.headerRef.startTimer()
             break
@@ -63,6 +71,17 @@
       },
       restartGame(){
         this.$refs.boardRef.restartGame()
+      },
+      changeBoardSize(size){
+        this.boardSize = size
+
+        this.movesHandler(true)
+        this.timerHandler('clear')
+        this.gameIsStarted = false
+
+        setTimeout(() => {
+          this.$refs.boardRef.initializeRandomOrderNumbers()
+        }, 0)
       }
     }
   }
@@ -85,6 +104,6 @@
   }
   .container{
     display: grid;
-    grid-template-columns: 460px 1fr;
+    grid-template-columns: auto 1fr;
   }
 </style>

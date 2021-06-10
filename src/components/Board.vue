@@ -1,5 +1,14 @@
 <template>
-    <div class="board">
+    <div 
+        class="board"
+        :class="{
+            size4x3: this.$props.boardSize === '4x3',
+            size4x4: this.$props.boardSize === '4x4',
+            size5x4: this.$props.boardSize === '5x4',
+            size6x5: this.$props.boardSize === '6x5',
+            size6x6: this.$props.boardSize === '6x6'
+        }"
+    >
         <BoardCell
             v-for="cell in cells"
             :key="cell.id"
@@ -47,6 +56,10 @@
             gameIsStarted: {
                 type: Boolean,
                 required: true
+            },
+            boardSize: {
+                type: String,
+                required: true
             }
         },
         methods: {
@@ -61,7 +74,7 @@
                 this.$emit('startGame', true)
             },
             initializeRandomOrderNumbers(){
-                const sourceNumbers = [1, 2, 3, 4, 5, 6]
+                const sourceNumbers = this.generateNumbers
                 const numbers = sourceNumbers.concat(sourceNumbers).sort(() => Math.random() - 0.5)
 
                 if(this.cells.length){
@@ -77,6 +90,7 @@
                     })
                 })
             },
+            
             cellHandler(id){
                 if(this.currentActiveNumbers.length < 2){
                     this._setActiveCell(id)
@@ -119,6 +133,39 @@
                     return true
                 }
                 return false
+            },
+            generateNumbers(){
+                const sourceNumbers = []
+                let iterations = 0
+                
+                switch(this.$props.boardSize){
+                    case '4x3': {
+                        iterations = 6
+                        break
+                    }
+                    case '4x4': {
+                        iterations = 8
+                        break
+                    }
+                    case '5x4': {
+                        iterations = 10
+                        break
+                    }
+                    case '6x5': {
+                        iterations = 15
+                        break
+                    }
+                    case '6x6': {
+                        iterations = 18
+                        break
+                    }
+                    default: break
+                }
+
+                for(let i = 1; i <= iterations; i++){
+                    sourceNumbers.push(i)
+                }
+                return sourceNumbers
             }
         },
         mounted(){
@@ -131,7 +178,6 @@
     .board{
         background-color: rgba(0, 0, 0, 0.4);
         display: grid;
-        grid-template: repeat(3, 1fr) / repeat(4, 1fr);
         gap: 10px;
         padding: 10px;
         position: relative;
@@ -139,6 +185,21 @@
         border-top-left-radius: 0;
         overflow: hidden;
         border: 2px solid rgb(70, 70, 70);
+    }
+    .board.size4x3{
+        grid-template: repeat(3, 1fr) / repeat(4, 1fr);
+    }
+    .board.size4x4{
+        grid-template: repeat(4, 1fr) / repeat(4, 1fr);
+    }
+    .board.size5x4{
+        grid-template: repeat(4, 1fr) / repeat(5, 1fr);
+    }
+    .board.size6x5{
+        grid-template: repeat(5, 1fr) / repeat(6, 1fr);
+    }
+    .board.size6x6{
+        grid-template: repeat(6, 1fr) / repeat(6, 1fr);
     }
     .overlay{
         position: absolute;

@@ -62,7 +62,7 @@
         transform: rotateY(-180deg);
     }
     .front{
-        background-color: rgb(23, 108, 235);
+        background-color: rgb(0, 73, 231);
         transform: rotateY(0);
         z-index: 2;
         backface-visibility: hidden;

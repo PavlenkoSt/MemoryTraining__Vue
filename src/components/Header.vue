@@ -39,6 +39,10 @@
                 this.stopTimer()
                 this.time = 0
                 this.startTimer()
+            },
+            clearTimer(){
+                this.stopTimer()
+                this.time = 0
             }
         }
     }
