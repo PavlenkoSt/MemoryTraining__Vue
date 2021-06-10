@@ -4,7 +4,7 @@
     <div class="container">
       <Board 
         :gameIsStarted="this.gameIsStarted"
-        :gameIsStartedChange="this.gameIsStartedChange"
+        @startGame="updateGameIsStarted($event)"
       />
     </div>
   </div>
@@ -24,7 +24,7 @@
       gameIsStarted: false
     }),
     methods: {
-      gameIsStartedChange(bool){
+      updateGameIsStarted(bool){
         this.gameIsStarted = bool
       }
     }
@@ -48,6 +48,6 @@
   }
   .container{
     display: grid;
-    grid-template-columns: 450px 1fr;
+    grid-template-columns: 460px 1fr;
   }
 </style>
