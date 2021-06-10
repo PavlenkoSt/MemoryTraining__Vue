@@ -52,10 +52,12 @@
         methods: {
             startGame(){
                 this.$emit('startGame', true)
+                this.$emit('timerChange', 'start')
             },
             restartGame(){
                 this.initializeRandomOrderNumbers()
                 this.$emit('movesChange', true)
+                this.$emit('timerChange', 'restart')
             },
             initializeRandomOrderNumbers(){
                 const sourceNumbers = [1, 2, 3, 4, 5, 6]
@@ -110,7 +112,11 @@
         },
         computed:{
             isWon(){
-                return this.cells.every(cell => cell.guessed)
+                if(this.cells.every(cell => cell.guessed)){
+                    this.$emit('timerChange', 'stop')
+                    return true
+                }
+                return false
             }
         },
         mounted(){

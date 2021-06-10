@@ -4,7 +4,7 @@
           Moves: {{ moves }}
       </div>
       <div>
-          Timer
+          Time: {{ time === 0 ? '00:00' : '' }} {{ time !== 0 ? time : '' | moment('mm:ss')}}
       </div>
   </div>
 </template>
@@ -13,7 +13,9 @@
     export default {
         name: 'Header',
         data: () => ({
-            moves: 0
+            moves: 0,
+            time: 0,
+            timerFunc: null
         }),
         methods: {
             incrementMoves(){
@@ -21,6 +23,20 @@
             },
             clearMoves(){
                 this.moves = 0
+            },
+            startTimer(){
+                this.timerFunc = setInterval(() => {
+                    this.time += 1
+                }, 1000)
+            },
+            stopTimer(){
+                clearInterval(this.timerFunc)
+                this.timerFunc = null
+            },
+            restartTimer(){
+                this.stopTimer()
+                this.time = 0
+                this.startTimer()
             }
         }
     }

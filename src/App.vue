@@ -8,6 +8,7 @@
         :gameIsStarted="this.gameIsStarted"
         @startGame="updateGameIsStarted($event)"
         @movesChange="movesHandler"
+        @timerChange="timerHandler"
       />
     </div>
   </div>
@@ -35,6 +36,22 @@
           this.$refs.headerRef.clearMoves()
         }else{
           this.$refs.headerRef.incrementMoves()
+        }
+      },
+      timerHandler(action){
+        switch(action){
+          case 'stop': {
+            this.$refs.headerRef.stopTimer()
+            break
+          }
+          case 'restart': {
+            this.$refs.headerRef.restartTimer()
+            break
+          }
+          case 'start': {
+            this.$refs.headerRef.startTimer()
+            break
+          } 
         }
       }
     }
