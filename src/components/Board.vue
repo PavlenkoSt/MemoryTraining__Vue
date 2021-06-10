@@ -14,7 +14,7 @@
             v-if="!this.$props.gameIsStarted || isWon"
         >
             <div 
-                v-if="!this.$props.gameIsStarted"
+                v-if="!this.$props.gameIsStarted && !isWon"
                 class="message"
                 @click="startGame"
             >Start game</div>
@@ -58,6 +58,7 @@
                 this.initializeRandomOrderNumbers()
                 this.$emit('movesChange', true)
                 this.$emit('timerChange', 'restart')
+                this.$emit('startGame', true)
             },
             initializeRandomOrderNumbers(){
                 const sourceNumbers = [1, 2, 3, 4, 5, 6]
@@ -114,6 +115,7 @@
             isWon(){
                 if(this.cells.every(cell => cell.guessed)){
                     this.$emit('timerChange', 'stop')
+                    this.$emit('startGame', false)
                     return true
                 }
                 return false
@@ -134,6 +136,7 @@
         padding: 10px;
         position: relative;
         border-radius: 8px;
+        border-top-left-radius: 0;
         overflow: hidden;
         border: 2px solid rgb(70, 70, 70);
     }

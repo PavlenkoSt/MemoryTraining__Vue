@@ -9,6 +9,11 @@
         @startGame="updateGameIsStarted($event)"
         @movesChange="movesHandler"
         @timerChange="timerHandler"
+        ref="boardRef"
+      />
+      <Options
+        :gameIsStarted="this.gameIsStarted"
+        @restart="restartGame"
       />
     </div>
   </div>
@@ -17,12 +22,14 @@
 <script>
   import Header from './components/Header.vue'
   import Board from './components/Board.vue'
+  import Options from './components/Options.vue'
 
   export default {
     name: 'App',
     components: {
       Header,
-      Board
+      Board,
+      Options
     },
     data: () => ({
       gameIsStarted: false
@@ -53,6 +60,9 @@
             break
           } 
         }
+      },
+      restartGame(){
+        this.$refs.boardRef.restartGame()
       }
     }
   }
