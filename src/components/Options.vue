@@ -42,8 +42,6 @@
                 this.$emit('restart')
             },
             changeBoardSize(size){
-                this.$emit('boardSizeIsChanged')
-
                 this.updateBoardSize(size)
 
                 this.clearMoves()
