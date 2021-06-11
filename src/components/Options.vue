@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <button 
-        :disabled="!this.$props.gameIsStarted"
+        :disabled="!gameIsStarted"
         class="restartBtn"
         @click="restartGame"
     >Restart</button>
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
+
     export default {
         name: 'Options',
         methods: {
@@ -42,11 +44,8 @@
                 this.$emit('changeBoardSize', size)
             }
         },
+        computed: mapGetters(['gameIsStarted']),
         props: {
-            gameIsStarted: {
-                type: Boolean,
-                retquired: true
-            },
             boardSize: {
                 type: String,
                 required: true

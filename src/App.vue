@@ -5,15 +5,13 @@
     />
     <div class="container">
       <Board 
-        :gameIsStarted="this.gameIsStarted"
         :boardSize="this.boardSize"
-        @startGame="updateGameIsStarted($event)"
+        @startGame="updateGameIsStarted"
         @movesChange="movesHandler"
         @timerChange="timerHandler"
         ref="boardRef"
       />
       <Options
-        :gameIsStarted="this.gameIsStarted"
         :boardSize="this.boardSize"
         @restart="restartGame"
         @changeBoardSize="changeBoardSize"
@@ -26,6 +24,7 @@
   import Header from './components/Header.vue'
   import Board from './components/Board.vue'
   import Options from './components/Options.vue'
+  import { mapMutations } from 'vuex'
 
   export default {
     name: 'App',
@@ -35,13 +34,10 @@
       Options
     },
     data: () => ({
-      gameIsStarted: false,
       boardSize: '4x3'
     }),
     methods: {
-      updateGameIsStarted(bool){
-        this.gameIsStarted = bool
-      },
+      ...mapMutations(['updateGameIsStarted']),
       movesHandler(needToClear = false){
         if(needToClear){
           this.$refs.headerRef.clearMoves()
@@ -77,8 +73,8 @@
 
         this.movesHandler(true)
         this.timerHandler('clear')
-        this.gameIsStarted = false
 
+        this.updateGameIsStarted(false)
         setTimeout(() => {
           this.$refs.boardRef.initializeRandomOrderNumbers()
         }, 0)

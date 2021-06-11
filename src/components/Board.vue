@@ -20,10 +20,10 @@
         />
         <div 
             class="overlay" 
-            v-if="!this.$props.gameIsStarted || isWon"
+            v-if="!gameIsStarted || isWon"
         >
             <div 
-                v-if="!this.$props.gameIsStarted && !isWon"
+                v-if="!gameIsStarted && !isWon"
                 class="message"
                 @click="startGame"
             >Start game</div>
@@ -42,6 +42,7 @@
 
 <script>
     import BoardCell from './BoardCell.vue'
+    import { mapGetters } from 'vuex'
 
     export default {
         name: 'Board',
@@ -53,10 +54,6 @@
             BoardCell
         },
         props: {
-            gameIsStarted: {
-                type: Boolean,
-                required: true
-            },
             boardSize: {
                 type: String,
                 required: true
@@ -126,6 +123,7 @@
             }
         },
         computed:{
+            ...mapGetters(['gameIsStarted']),
             isWon(){
                 if(this.cells.every(cell => cell.guessed)){
                     this.$emit('timerChange', 'stop')
