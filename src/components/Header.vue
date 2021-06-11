@@ -12,39 +12,11 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
+
     export default {
         name: 'Header',
-        data: () => ({
-            moves: 0,
-            time: 0,
-            timerFunc: null
-        }),
-        methods: {
-            incrementMoves(){
-                this.moves += 1
-            },
-            clearMoves(){
-                this.moves = 0
-            },
-            startTimer(){
-                this.timerFunc = setInterval(() => {
-                    this.time += 1
-                }, 1000)
-            },
-            stopTimer(){
-                clearInterval(this.timerFunc)
-                this.timerFunc = null
-            },
-            restartTimer(){
-                this.stopTimer()
-                this.time = 0
-                this.startTimer()
-            },
-            clearTimer(){
-                this.stopTimer()
-                this.time = 0
-            }
-        }
+        computed: mapGetters(['time', 'moves'])
     }
 </script>
 

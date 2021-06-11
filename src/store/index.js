@@ -1,11 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import movesAndTimer from './modules/movesAndTimer'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-    actions: {
-        
+    state: {
+        gameIsStarted: false,
+        boardSize: '4x3',
+        cells: [],
+        currentActiveNumbers: []
     },
     mutations:{
         updateGameIsStarted(state, bool){
@@ -13,11 +17,13 @@ export default new Vuex.Store({
         },
         updateBoardSize(state, size){
             state.boardSize = size
+        },
+        updateCells(state, cells){
+            state.cells = cells
+        },
+        updateCurrentActiveNumbers(state, numbers){
+            state.currentActiveNumbers = numbers
         }
-    },
-    state: {
-        gameIsStarted: false,
-        boardSize: '4x3'
     },
     getters: {
         gameIsStarted(state){
@@ -25,6 +31,15 @@ export default new Vuex.Store({
         },
         boardSize(state){
             return state.boardSize
+        },
+        cells(state){
+            return state.cells
+        },
+        currentActiveNumbers(state){
+            return state.currentActiveNumbers
         }
+    },
+    modules: {
+        movesAndTimer
     }
 })

@@ -5,10 +5,7 @@
     />
     <div class="container">
       <Board 
-        :boardSize="this.boardSize"
         @startGame="updateGameIsStarted"
-        @movesChange="movesHandler"
-        @timerChange="timerHandler"
         ref="boardRef"
       />
       <Options
@@ -24,7 +21,7 @@
   import Header from './components/Header.vue'
   import Board from './components/Board.vue'
   import Options from './components/Options.vue'
-  import { mapMutations } from 'vuex'
+  import { mapGetters, mapMutations } from 'vuex'
 
   export default {
     name: 'App',
@@ -33,46 +30,17 @@
       Board,
       Options
     },
-    data: () => ({
-      boardSize: '4x3'
-    }),
+    computed: mapGetters(['boardSize']),
     methods: {
-      ...mapMutations(['updateGameIsStarted']),
-      movesHandler(needToClear = false){
-        if(needToClear){
-          this.$refs.headerRef.clearMoves()
-        }else{
-          this.$refs.headerRef.incrementMoves()
-        }
-      },
-      timerHandler(action){
-        switch(action){
-          case 'stop': {
-            this.$refs.headerRef.stopTimer()
-            break
-          }
-          case 'restart': {
-            this.$refs.headerRef.restartTimer()
-            break
-          }
-          case 'clear': {
-            this.$refs.headerRef.clearTimer()
-            break
-          }
-          case 'start': {
-            this.$refs.headerRef.startTimer()
-            break
-          } 
-        }
-      },
+      ...mapMutations(['updateGameIsStarted', 'updateBoardSize', 'clearMoves', 'clearTimer']),
       restartGame(){
         this.$refs.boardRef.restartGame()
       },
       changeBoardSize(size){
-        this.boardSize = size
+        this.updateBoardSize(size)
 
-        this.movesHandler(true)
-        this.timerHandler('clear')
+        this.clearMoves()
+        this.clearTimer()
 
         this.updateGameIsStarted(false)
         setTimeout(() => {

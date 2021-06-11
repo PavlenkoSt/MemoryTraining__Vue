@@ -2,11 +2,11 @@
     <div 
         class="board"
         :class="{
-            size4x3: this.$props.boardSize === '4x3',
-            size4x4: this.$props.boardSize === '4x4',
-            size5x4: this.$props.boardSize === '5x4',
-            size6x5: this.$props.boardSize === '6x5',
-            size6x6: this.$props.boardSize === '6x6'
+            size4x3: this.boardSize === '4x3',
+            size4x4: this.boardSize === '4x4',
+            size5x4: this.boardSize === '5x4',
+            size6x5: this.boardSize === '6x5',
+            size6x6: this.boardSize === '6x6'
         }"
     >
         <BoardCell
@@ -42,32 +42,25 @@
 
 <script>
     import BoardCell from './BoardCell.vue'
-    import { mapGetters } from 'vuex'
+    import { mapGetters, mapMutations } from 'vuex'
 
     export default {
         name: 'Board',
-        data: () => ({
-            cells: [],
-            currentActiveNumbers: []
-        }),
         components: {
             BoardCell
         },
-        props: {
-            boardSize: {
-                type: String,
-                required: true
-            }
-        },
         methods: {
+            ...mapMutations(['updateCells', 'updateCurrentActiveNumbers', 'incrementMoves', 'clearMoves', 
+            'setTimer', 'restartTimer', 'stopTimer']),
             startGame(){
                 this.$emit('startGame', true)
-                this.$emit('timerChange', 'start')
+                this.setTimer()
             },
             restartGame(){
                 this.initializeRandomOrderNumbers()
-                this.$emit('movesChange', true)
-                this.$emit('timerChange', 'restart')
+                this.clearMoves()
+
+                this.restartTimer()
                 this.$emit('startGame', true)
             },
             initializeRandomOrderNumbers(){
@@ -75,16 +68,18 @@
                 const numbers = sourceNumbers.concat(sourceNumbers).sort(() => Math.random() - 0.5)
 
                 if(this.cells.length){
-                    this.cells = []
+                    this.updateCells([])
                 }
 
                 numbers.forEach((num, i) => {
-                    this.cells.push({
+                    const newCell = {
                         value: num,
                         id: i,
                         active: false,
                         guessed: false
-                    })
+                    }
+
+                    this.updateCells([...this.cells, newCell])
                 })
             },
             
@@ -98,17 +93,19 @@
                 }
             },
             _setActiveCell(id){
-                this.cells = this.cells.map(cell => {
+                const cells = this.cells.map(cell => {
                     if(cell.id === id){
                         cell.active = true
-                        this.currentActiveNumbers.push(cell)
+                        this.updateCurrentActiveNumbers([...this.currentActiveNumbers, cell])
                     }
                     return cell
                 })
+
+                this.updateCells(cells)
             },
             _clearActiveCell(guessed){
                 setTimeout(() => {
-                    this.cells = this.cells.map(cell => {
+                    const cells = this.cells.map(cell => {
                         if(cell.active){
                             cell.active = false
                             if(guessed){
@@ -117,16 +114,19 @@
                         }
                         return cell
                     })
-                    this.currentActiveNumbers = []
-                    this.$emit('movesChange')
+
+                    this.updateCells(cells)
+
+                    this.updateCurrentActiveNumbers([])
+                    this.incrementMoves()
                 }, 1000)
             }
         },
         computed:{
-            ...mapGetters(['gameIsStarted']),
+            ...mapGetters(['gameIsStarted', 'boardSize', 'cells', 'currentActiveNumbers']),
             isWon(){
                 if(this.cells.every(cell => cell.guessed)){
-                    this.$emit('timerChange', 'stop')
+                    this.stopTimer()
                     this.$emit('startGame', false)
                     return true
                 }
@@ -135,8 +135,8 @@
             generateNumbers(){
                 const sourceNumbers = []
                 let iterations = 0
-                
-                switch(this.$props.boardSize){
+
+                switch(this.boardSize){
                     case '4x3': {
                         iterations = 6
                         break

@@ -8,23 +8,23 @@
     <div class="boardSize">
         <span>Board size: </span>
         <button
-            :class="{active: this.$props.boardSize === '4x3'}"
+            :class="{active: this.boardSize === '4x3'}"
             @click="changeBoardSize('4x3')"
         >4x3</button>
         <button
-            :class="{active: this.$props.boardSize === '4x4'}"
+            :class="{active: this.boardSize === '4x4'}"
             @click="changeBoardSize('4x4')"
         >4x4</button>
         <button
-            :class="{active: this.$props.boardSize === '5x4'}"
+            :class="{active: this.boardSize === '5x4'}"
             @click="changeBoardSize('5x4')"
         >5x4</button>
         <button
-            :class="{active: this.$props.boardSize === '6x5'}"
+            :class="{active: this.boardSize === '6x5'}"
             @click="changeBoardSize('6x5')"
         >6x5</button>
         <button
-            :class="{active: this.$props.boardSize === '6x6'}"
+            :class="{active: this.boardSize === '6x6'}"
             @click="changeBoardSize('6x6')"
         >6x6</button>
     </div>
@@ -32,11 +32,12 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapGetters, mapMutations } from 'vuex'
 
     export default {
         name: 'Options',
         methods: {
+            ...mapMutations(['updateBoardSize']),
             restartGame(){
                 this.$emit('restart')
             },
@@ -44,13 +45,7 @@
                 this.$emit('changeBoardSize', size)
             }
         },
-        computed: mapGetters(['gameIsStarted']),
-        props: {
-            boardSize: {
-                type: String,
-                required: true
-            }
-        },
+        computed: mapGetters(['gameIsStarted', 'boardSize']),
     }
 </script>
 
