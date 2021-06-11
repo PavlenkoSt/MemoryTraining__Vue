@@ -82,7 +82,6 @@
                     this.updateCells([...this.cells, newCell])
                 })
             },
-            
             cellHandler(id){
                 if(this.currentActiveNumbers.length < 2){
                     this._setActiveCell(id)
