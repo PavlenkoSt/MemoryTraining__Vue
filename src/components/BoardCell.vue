@@ -2,7 +2,7 @@
     <div 
         class="trigger"
         :class="{active: this.$props.isActive || this.$props.guessed}"
-        @click="setActiveCell"
+        @click="activateCell"
     >
         <div class="cell">
             <div class="front"></div>
@@ -12,6 +12,8 @@
 </template>
 
 <script>
+    import { mapMutations, mapGetters } from 'vuex'
+
     export default {
         name: 'BoardCell',
         props: {
@@ -32,10 +34,25 @@
                 required: true
             }
         },
+        computed: mapGetters(['currentActiveNumbers']),
         methods: {
-            setActiveCell(){
+            ...mapMutations(['clearActiveCell', 'incrementMoves', 'setActiveCell']),
+            activateCell(){
                 if(!this.$props.isActive && !this.$props.guessed){
-                    this.$emit('setActiveCell', this.$props.id)
+                    this.cellHandler(this.$props.id)
+                }
+            },
+            cellHandler(id){
+                if(this.currentActiveNumbers.length < 2){
+                    this.setActiveCell(id)
+                    if(this.currentActiveNumbers.length === 2){
+                        const guessed = this.currentActiveNumbers[0].value === this.currentActiveNumbers[1].value
+
+                        setTimeout(() => {
+                            this.clearActiveCell(guessed)
+                            this.incrementMoves()
+                        }, 1000)
+                    }
                 }
             }
         }

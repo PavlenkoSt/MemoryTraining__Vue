@@ -16,22 +16,21 @@
             :number="cell.value"
             :isActive="cell.active"
             :guessed="cell.guessed"
-            @setActiveCell="cellHandler($event)"
         />
         <div 
             class="overlay" 
-            v-if="!gameIsStarted || isWon"
+            v-if="!gameIsStarted || won"
         >
             <div 
-                v-if="!gameIsStarted && !isWon"
+                v-if="!gameIsStarted && !won"
                 class="message"
                 @click="letsStartGame"
             >Start game</div>
 
             <div 
-                v-if="isWon"
+                v-if="won"
                 class="message"
-                @click="restartGame"
+                @click="this.$props._restartGame"
             >
                 <div>You won!</div>
                 <div>Play again</div>
@@ -50,123 +49,27 @@
             BoardCell
         },
         methods: {
-            ...mapMutations(['startGame', 'endGame', 'updateCells', 'updateCurrentActiveNumbers', 'incrementMoves', 'clearMoves', 
-            'setTimer', 'restartTimer', 'stopTimer']),
+            ...mapMutations(['startGame', 'endGame', 'setTimer', 'stopTimer']),
             letsStartGame(){
                 this.startGame()
                 this.setTimer()
-            },
-            restartGame(){
-                this.initializeRandomOrderNumbers()
-                this.clearMoves()
-
-                this.restartTimer()
-                this.startGame()
-            },
-            initializeRandomOrderNumbers(){
-                const sourceNumbers = this.generateNumbers
-                const numbers = sourceNumbers.concat(sourceNumbers).sort(() => Math.random() - 0.5)
-
-                if(this.cells.length){
-                    this.updateCells([])
-                }
-
-                numbers.forEach((num, i) => {
-                    const newCell = {
-                        value: num,
-                        id: i,
-                        active: false,
-                        guessed: false
-                    }
-
-                    this.updateCells([...this.cells, newCell])
-                })
-            },
-            cellHandler(id){
-                if(this.currentActiveNumbers.length < 2){
-                    this._setActiveCell(id)
-                    if(this.currentActiveNumbers.length === 2){
-                        const guessed = this.currentActiveNumbers[0].value === this.currentActiveNumbers[1].value
-                        this._clearActiveCell(guessed)
-                    }
-                }
-            },
-            _setActiveCell(id){
-                const cells = this.cells.map(cell => {
-                    if(cell.id === id){
-                        cell.active = true
-                        this.updateCurrentActiveNumbers([...this.currentActiveNumbers, cell])
-                    }
-                    return cell
-                })
-
-                this.updateCells(cells)
-            },
-            _clearActiveCell(guessed){
-                setTimeout(() => {
-                    const cells = this.cells.map(cell => {
-                        if(cell.active){
-                            cell.active = false
-                            if(guessed){
-                                cell.guessed = true
-                            }
-                        }
-                        return cell
-                    })
-
-                    this.updateCells(cells)
-
-                    this.updateCurrentActiveNumbers([])
-                    this.incrementMoves()
-                }, 1000)
             }
         },
         computed:{
-            ...mapGetters(['gameIsStarted', 'boardSize', 'cells', 'currentActiveNumbers']),
-            isWon(){
-                if(this.cells.every(cell => cell.guessed)){
+            ...mapGetters(['gameIsStarted', 'boardSize', 'cells', 'isWon']),
+            won(){
+                if(this.isWon){
                     this.stopTimer()
                     this.endGame()
-                    return true
                 }
-                return false
-            },
-            generateNumbers(){
-                const sourceNumbers = []
-                let iterations = 0
-
-                switch(this.boardSize){
-                    case '4x3': {
-                        iterations = 6
-                        break
-                    }
-                    case '4x4': {
-                        iterations = 8
-                        break
-                    }
-                    case '5x4': {
-                        iterations = 10
-                        break
-                    }
-                    case '6x5': {
-                        iterations = 15
-                        break
-                    }
-                    case '6x6': {
-                        iterations = 18
-                        break
-                    }
-                    default: break
-                }
-
-                for(let i = 1; i <= iterations; i++){
-                    sourceNumbers.push(i)
-                }
-                return sourceNumbers
+                return this.isWon
             }
         },
-        mounted(){
-            this.initializeRandomOrderNumbers()
+        props: {
+            _restartGame: {
+                type: Function,
+                required: true
+            }
         }
     }
 </script>

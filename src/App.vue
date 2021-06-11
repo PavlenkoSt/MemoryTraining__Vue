@@ -5,11 +5,11 @@
     />
     <div class="container">
       <Board 
-        ref="boardRef"
+        :_restartGame="_restartGame"
       />
       <Options
-        @restart="restartGame"
-        @boardSizeIsChanged="rerenderBoard"
+        :_restartGame="_restartGame"
+        :_initializeRandomOrderNumbers="_initializeRandomOrderNumbers"
       />
     </div>
   </div>
@@ -19,6 +19,7 @@
   import Header from './components/Header.vue'
   import Board from './components/Board.vue'
   import Options from './components/Options.vue'
+  import { mapMutations } from 'vuex'
 
   export default {
     name: 'App',
@@ -28,12 +29,23 @@
       Options
     },
     methods: {
-      restartGame(){
-        this.$refs.boardRef.restartGame()
+      ...mapMutations(['generateNumbers', 'initializeRandomOrderNumbers', 'updateCurrentActiveNumbers', 
+        'clearMoves', 'restartTimer', 'startGame']),
+      _restartGame(){
+        this.updateCurrentActiveNumbers([])
+        this._initializeRandomOrderNumbers()
+        this.clearMoves()
+
+        this.restartTimer()
+        this.startGame()
       },
-      rerenderBoard(){
-        this.$refs.boardRef.initializeRandomOrderNumbers()
+      _initializeRandomOrderNumbers(){
+        this.generateNumbers()
+        this.initializeRandomOrderNumbers()
       }
+    },
+    mounted(){
+        this._initializeRandomOrderNumbers()
     }
   }
 </script>

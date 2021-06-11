@@ -3,7 +3,7 @@
     <button 
         :disabled="!gameIsStarted"
         class="restart-btn"
-        @click="restartGame"
+        @click="this.$props._restartGame"
     >Restart</button>
     <div class="board-size">
         <span>Board size: </span>
@@ -28,9 +28,6 @@
         }),
         methods: {
             ...mapMutations(['updateBoardSize', 'clearMoves', 'clearTimer', 'endGame']),
-            restartGame(){
-                this.$emit('restart')
-            },
             changeBoardSize(size){
                 this.updateBoardSize(size)
 
@@ -38,13 +35,23 @@
                 this.clearTimer()
 
                 this.endGame()
+
                 setTimeout(() => {
-                    this.$emit('boardSizeIsChanged')
+                   this.$props._initializeRandomOrderNumbers()
                 }, 0)
-                
             }
         },
         computed: mapGetters(['gameIsStarted', 'boardSize']),
+        props: {
+            _initializeRandomOrderNumbers: {
+                type: Function,
+                required: true
+            },
+            _restartGame: {
+                type: Function,
+                required: true
+            }
+        },
     }
 </script>
 
