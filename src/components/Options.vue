@@ -37,12 +37,23 @@
     export default {
         name: 'Options',
         methods: {
-            ...mapMutations(['updateBoardSize']),
+            ...mapMutations(['updateBoardSize', 'clearMoves', 'clearTimer', 'endGame']),
             restartGame(){
                 this.$emit('restart')
             },
             changeBoardSize(size){
-                this.$emit('changeBoardSize', size)
+                this.$emit('boardSizeIsChanged')
+
+                this.updateBoardSize(size)
+
+                this.clearMoves()
+                this.clearTimer()
+
+                this.endGame()
+                setTimeout(() => {
+                    this.$emit('boardSizeIsChanged')
+                }, 0)
+                
             }
         },
         computed: mapGetters(['gameIsStarted', 'boardSize']),

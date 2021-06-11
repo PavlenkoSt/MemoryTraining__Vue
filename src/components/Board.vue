@@ -25,7 +25,7 @@
             <div 
                 v-if="!gameIsStarted && !isWon"
                 class="message"
-                @click="startGame"
+                @click="letsStartGame"
             >Start game</div>
 
             <div 
@@ -50,10 +50,10 @@
             BoardCell
         },
         methods: {
-            ...mapMutations(['updateCells', 'updateCurrentActiveNumbers', 'incrementMoves', 'clearMoves', 
+            ...mapMutations(['startGame', 'endGame', 'updateCells', 'updateCurrentActiveNumbers', 'incrementMoves', 'clearMoves', 
             'setTimer', 'restartTimer', 'stopTimer']),
-            startGame(){
-                this.$emit('startGame', true)
+            letsStartGame(){
+                this.startGame()
                 this.setTimer()
             },
             restartGame(){
@@ -61,7 +61,7 @@
                 this.clearMoves()
 
                 this.restartTimer()
-                this.$emit('startGame', true)
+                this.startGame()
             },
             initializeRandomOrderNumbers(){
                 const sourceNumbers = this.generateNumbers
@@ -127,7 +127,7 @@
             isWon(){
                 if(this.cells.every(cell => cell.guessed)){
                     this.stopTimer()
-                    this.$emit('startGame', false)
+                    this.endGame()
                     return true
                 }
                 return false

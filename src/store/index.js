@@ -12,8 +12,11 @@ export default new Vuex.Store({
         currentActiveNumbers: []
     },
     mutations:{
-        updateGameIsStarted(state, bool){
-            state.gameIsStarted = bool
+        startGame(state){
+            state.gameIsStarted = true
+        },
+        endGame(state){
+            state.gameIsStarted = false
         },
         updateBoardSize(state, size){
             state.boardSize = size

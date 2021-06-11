@@ -5,13 +5,11 @@
     />
     <div class="container">
       <Board 
-        @startGame="updateGameIsStarted"
         ref="boardRef"
       />
       <Options
-        :boardSize="this.boardSize"
         @restart="restartGame"
-        @changeBoardSize="changeBoardSize"
+        @boardSizeIsChanged="rerenderBoard"
       />
     </div>
   </div>
@@ -21,7 +19,6 @@
   import Header from './components/Header.vue'
   import Board from './components/Board.vue'
   import Options from './components/Options.vue'
-  import { mapGetters, mapMutations } from 'vuex'
 
   export default {
     name: 'App',
@@ -30,22 +27,12 @@
       Board,
       Options
     },
-    computed: mapGetters(['boardSize']),
     methods: {
-      ...mapMutations(['updateGameIsStarted', 'updateBoardSize', 'clearMoves', 'clearTimer']),
       restartGame(){
         this.$refs.boardRef.restartGame()
       },
-      changeBoardSize(size){
-        this.updateBoardSize(size)
-
-        this.clearMoves()
-        this.clearTimer()
-
-        this.updateGameIsStarted(false)
-        setTimeout(() => {
-          this.$refs.boardRef.initializeRandomOrderNumbers()
-        }, 0)
+      rerenderBoard(){
+        this.$refs.boardRef.initializeRandomOrderNumbers()
       }
     }
   }
