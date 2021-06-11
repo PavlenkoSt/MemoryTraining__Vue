@@ -1,3 +1,3 @@
 module.exports = {
-    publicPath: '/'
+    publicPath: 'MemoryTraining__Vue'
 }
