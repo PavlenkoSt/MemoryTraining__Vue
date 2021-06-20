@@ -13,16 +13,16 @@
         />
         <div 
             class="overlay" 
-            v-if="!gameIsStarted || won"
+            v-if="!gameIsStarted || isWon"
         >
             <div 
-                v-if="!gameIsStarted && !won"
+                v-if="!gameIsStarted && !isWon"
                 class="message"
                 @click="letsStartGame"
             >Start game</div>
 
             <div 
-                v-if="won"
+                v-if="won()"
                 class="message"
                 @click="generateRestart"
             >
@@ -50,17 +50,17 @@
             },
             generateRestart(){
                 this.$emit('restart')
-            }
-        },
-        computed:{
-            ...mapGetters(['gameIsStarted', 'boardSize', 'cells', 'isWon']),
+            },
             won(){
                 if(this.isWon){
                     this.stopTimer()
                     this.endGame()
                 }
                 return this.isWon
-            },
+            }
+        },
+        computed:{
+            ...mapGetters(['gameIsStarted', 'boardSize', 'cells', 'isWon']),
             boardSizeClass(){
                 return this.boardSize === '4x3' ? 'size4x3' : 
                 this.boardSize === '4x4' ? 'size4x4' :

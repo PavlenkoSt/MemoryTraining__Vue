@@ -81,8 +81,6 @@ export default {
                 state.cells = ([...state.cells, newCell])
             })
         },
-
-
         updateCells(state, cells){
             state.cells = cells
         },
