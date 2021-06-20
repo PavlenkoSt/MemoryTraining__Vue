@@ -1,15 +1,13 @@
 <template>
   <div id="app">
-    <Header
-      ref="headerRef"
-    />
+    <Header />
     <div class="container">
       <Board 
-        :_restartGame="_restartGame"
+        @restart="_restartGame"
       />
       <Options
-        :_restartGame="_restartGame"
-        :_initializeRandomOrderNumbers="_initializeRandomOrderNumbers"
+        @restart="_restartGame"
+        @reinitializeBoard="_initializeRandomOrderNumbers"
       />
     </div>
   </div>

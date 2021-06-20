@@ -4,7 +4,7 @@
             Moves: {{ moves }}
         </div>
         <div class="time">
-                Time: <span> {{ startTimer }} {{ timer | moment('mm:ss') }} </span>
+            Time: <span> {{ timerInitial }} {{ timerStarted | moment('mm:ss') }} </span>
         </div>
     </header>
 </template>
@@ -16,10 +16,10 @@
         name: 'Header',
         computed: {
             ...mapGetters(['time', 'moves']),
-            startTimer(){
+            timerInitial(){
                 return this.time === 0 ? '00:00' : ''
             },
-            timer(){
+            timerStarted(){
                 return this.time !== 0 ? this.time : ''
             }
         }

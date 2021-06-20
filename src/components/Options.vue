@@ -3,7 +3,7 @@
     <button 
         :disabled="!gameIsStarted"
         class="restart-btn"
-        @click="this.$props._restartGame"
+        @click="generateRestart"
     >Restart</button>
     <div class="board-size">
         <span>Board size: </span>
@@ -37,21 +37,14 @@
                 this.endGame()
 
                 setTimeout(() => {
-                   this.$props._initializeRandomOrderNumbers()
+                   this.$emit('reinitializeBoard')
                 }, 0)
+            },
+            generateRestart(){
+                this.$emit('restart')
             }
         },
         computed: mapGetters(['gameIsStarted', 'boardSize']),
-        props: {
-            _initializeRandomOrderNumbers: {
-                type: Function,
-                required: true
-            },
-            _restartGame: {
-                type: Function,
-                required: true
-            }
-        },
     }
 </script>
 

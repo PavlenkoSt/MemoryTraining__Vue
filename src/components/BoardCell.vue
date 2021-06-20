@@ -1,12 +1,12 @@
 <template>
     <div 
         class="trigger"
-        :class="{active: this.$props.isActive || this.$props.guessed}"
+        :class="{active: isActive || guessed}"
         @click="activateCell"
     >
         <div class="cell">
             <div class="front"></div>
-            <div class="back">{{ this.$props.number }}</div>
+            <div class="back">{{ number }}</div>
         </div>
     </div>
 </template>
@@ -38,8 +38,8 @@
         methods: {
             ...mapMutations(['clearActiveCell', 'incrementMoves', 'setActiveCell']),
             activateCell(){
-                if(!this.$props.isActive && !this.$props.guessed){
-                    this.cellHandler(this.$props.id)
+                if(!this.isActive && !this.guessed){
+                    this.cellHandler(this.id)
                 }
             },
             cellHandler(id){

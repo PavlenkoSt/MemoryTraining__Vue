@@ -1,13 +1,7 @@
 <template>
     <div 
         class="board"
-        :class="{
-            size4x3: this.boardSize === '4x3',
-            size4x4: this.boardSize === '4x4',
-            size5x4: this.boardSize === '5x4',
-            size6x5: this.boardSize === '6x5',
-            size6x6: this.boardSize === '6x6'
-        }"
+        :class=boardSizeClass
     >
         <BoardCell
             v-for="cell in cells"
@@ -30,7 +24,7 @@
             <div 
                 v-if="won"
                 class="message"
-                @click="this.$props._restartGame"
+                @click="generateRestart"
             >
                 <div>You won!</div>
                 <div>Play again</div>
@@ -53,6 +47,9 @@
             letsStartGame(){
                 this.startGame()
                 this.setTimer()
+            },
+            generateRestart(){
+                this.$emit('restart')
             }
         },
         computed:{
@@ -63,12 +60,14 @@
                     this.endGame()
                 }
                 return this.isWon
-            }
-        },
-        props: {
-            _restartGame: {
-                type: Function,
-                required: true
+            },
+            boardSizeClass(){
+                return this.boardSize === '4x3' ? 'size4x3' : 
+                this.boardSize === '4x4' ? 'size4x4' :
+                this.boardSize === '5x4' ? 'size5x4' : 
+                this.boardSize === '6x5' ? 'size6x5' : 
+                this.boardSize === '6x6' ? 'size6x6' :
+                null
             }
         }
     }
